@@ -1,0 +1,30 @@
+// C++ code
+//
+int sensorPin = 2;
+int ledPin = 13;
+uint8_t ledState = LOW;
+uint8_t sensorState = LOW;
+
+void setup()
+{
+  pinMode(sensorPin, INPUT);
+  pinMode(ledPin, OUTPUT);
+  Serial.begin(9600);
+}
+
+void loop()
+{
+  sensorState = digitalRead(sensorPin);
+  
+  Serial.print(sensorState);
+  Serial.print(ledState);
+  Serial.println("");
+  
+  if(sensorState == HIGH) {
+    // turn LED on:
+    digitalWrite(ledPin, HIGH);
+  } else {
+    // turn LED off:
+    digitalWrite(ledPin, LOW);
+  }
+}
