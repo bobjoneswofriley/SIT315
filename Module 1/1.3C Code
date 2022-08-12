@@ -1,0 +1,88 @@
+// C++ code
+//
+int sensorPin = 2;
+int sonicPin = 4;
+int ledGreenPin = 13;
+int ledRedPin = 12;
+int ledBluePin = 8;
+int ledWhitePin = 7;
+
+uint8_t ledGreenState = LOW;
+uint8_t ledRedState = LOW;
+uint8_t ledBlueState = LOW;
+uint8_t ledWhiteState = LOW;
+uint8_t sensorState = LOW;
+uint8_t sonicState = LOW;
+
+int baselineTemp = 0;
+int celsius = 0;
+
+void setup()
+{
+  pinMode(sensorPin, INPUT_PULLUP);
+  pinMode(sonicPin, INPUT_PULLUP);
+  pinMode(ledRedPin, OUTPUT);
+  pinMode(ledGreenPin, OUTPUT);
+  pinMode(A0, INPUT);
+  pinMode(ledRedPin, OUTPUT);
+  pinMode(ledBluePin, OUTPUT);
+  pinMode(ledWhitePin, OUTPUT);
+  attachInterrupt(digitalPinToInterrupt(4), pin_ISR2, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(2), pin_ISR, HIGH);
+  Serial.begin(9600);
+}
+
+void loop()
+{
+
+}
+
+void pin_ISR(){
+  sensorState = digitalRead(sensorPin);
+  digitalWrite(ledGreenPin, sensorState);
+  
+  Serial.print(sensorState);
+  Serial.print(ledGreenState);
+  Serial.println("");
+  
+  baselineTemp = 40;
+  
+  celsius = map(((analogRead(A0) - 20) * 3.04), 0, 1023, -40, 125);
+  
+  Serial.print(celsius);
+  Serial.print(" C, ");
+  
+   if (celsius < baselineTemp) {
+    digitalWrite(ledRedPin, LOW);
+    digitalWrite(ledBluePin, LOW);
+    digitalWrite(ledWhitePin, LOW);
+  }
+  if (celsius >= baselineTemp && celsius < baselineTemp + 10) {
+    digitalWrite(ledRedPin, HIGH);
+    digitalWrite(ledBluePin, LOW);
+    digitalWrite(ledWhitePin, LOW);
+  }
+  if (celsius >= baselineTemp + 10 && celsius < baselineTemp + 20) {
+    digitalWrite(ledRedPin, HIGH);
+    digitalWrite(ledBluePin, HIGH);
+    digitalWrite(ledWhitePin, LOW);
+  }
+  if (celsius >= baselineTemp + 20 && celsius < baselineTemp + 30) {
+    digitalWrite(ledRedPin, HIGH);
+    digitalWrite(ledBluePin, HIGH);
+    digitalWrite(ledWhitePin, HIGH);
+  }
+  if (celsius >= baselineTemp + 30) {
+    digitalWrite(ledRedPin, HIGH);
+    digitalWrite(ledBluePin, HIGH);
+    digitalWrite(ledWhitePin, HIGH);
+  }
+}
+
+void pin_ISR2()
+{
+  sonicState = digitalRead(sonicPin);
+  ledGreenState = sonicState;
+  digitalWrite(ledGreenPin, ledGreenState);
+}
+
