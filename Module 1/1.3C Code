@@ -27,8 +27,8 @@ void setup()
   pinMode(ledRedPin, OUTPUT);
   pinMode(ledBluePin, OUTPUT);
   pinMode(ledWhitePin, OUTPUT);
-  attachInterrupt(digitalPinToInterrupt(4), pin_ISR2, CHANGE);
-  attachInterrupt(digitalPinToInterrupt(2), pin_ISR, HIGH);
+  attachInterrupt(0, pin_ISR, RISING);
+  attachInterrupt(0, pin_ISR, HIGH);
   Serial.begin(9600);
 }
 
@@ -78,11 +78,3 @@ void pin_ISR(){
     digitalWrite(ledWhitePin, HIGH);
   }
 }
-
-void pin_ISR2()
-{
-  sonicState = digitalRead(sonicPin);
-  ledGreenState = sonicState;
-  digitalWrite(ledGreenPin, ledGreenState);
-}
-
